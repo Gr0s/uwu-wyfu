@@ -5,28 +5,25 @@ using UnityEngine;
 public class destroyingBlocks : MonoBehaviour
 {
     public float MiningDistance = 2.0f;
-    public float MiningTime = 2.0f; // Czas potrzebny do zniszczenia obiektu
     private bool isMining = false;
-    private float miningTimer = 0.0f;
+    private float miningTimer = 0f;
+    private BlockScript currentTargetBlockScript; // Dodano referencjê do aktualnego obiektu docelowego.
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
             isMining = true;
-            miningTimer = 0.0f;
         }
 
         if (Input.GetMouseButtonUp(0))
         {
             isMining = false;
-            miningTimer = 0.0f;
+            miningTimer = 0f;
         }
 
         if (isMining)
         {
-            miningTimer += Time.deltaTime;
-
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
@@ -56,21 +53,29 @@ public class destroyingBlocks : MonoBehaviour
 
                         if (canDestroy)
                         {
-                            // Zmniejszanie skali obiektu na podstawie miningTimer
-                            float destructionProgress = Mathf.Clamp01(miningTimer / MiningTime);
-                            hit.collider.transform.localScale = new Vector3(1.0f - destructionProgress, 1.0f - destructionProgress, 1.0f);
-
-                            // Jeœli czas miningu przekroczy³ MiningTime, zniszcz obiekt
-                            if (miningTimer >= MiningTime)
+                            // Pobierz skrypt BlockScript z obiektu docelowego.
+                            BlockScript blockScript = hit.collider.gameObject.GetComponent<BlockScript>();
+                            if (blockScript != null)
                             {
-                                Destroy(hit.collider.gameObject);
+                                // Jeœli kursor zosta³ przesuniêty na inny obiekt, zresetuj timer.
+                                if (blockScript != currentTargetBlockScript)
+                                {
+                                    miningTimer = 0f;
+                                    currentTargetBlockScript = blockScript; // Ustaw nowy obiekt docelowy.
+                                }
+
+                                // Odjêcie durability w zale¿noœci od czasu, przez który trzymany jest kursor.
+                                miningTimer += Time.deltaTime;
+                                float durabilityDecrease = miningTimer / blockScript.MiningTime;
+                                blockScript.DecreaseDurability(durabilityDecrease);
+
+                                // Jeœli durability osi¹gnie 0, zniszcz blok.
+                                if (blockScript.CurrentDurability <= 0f)
+                                {
+                                    blockScript.DestroyBlock();
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        // Resetuj timer, jeœli myszka zosta³a oddalona od obiektu
-                        miningTimer = 0.0f;
                     }
                 }
             }

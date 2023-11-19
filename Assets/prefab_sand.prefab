@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4969380740813775271}
   - component: {fileID: 4073907680424394706}
   - component: {fileID: 3024148737448897832}
+  - component: {fileID: 7450586408476822671}
   m_Layer: 1
   m_Name: prefab_sand
   m_TagString: Zniszczalny
@@ -95,7 +96,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -111,3 +112,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &7450586408476822671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5580116011836516625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86a1bebd9c82630498c5f2f488fbdc32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MiningTime: 20
