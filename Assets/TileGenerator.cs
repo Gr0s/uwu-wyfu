@@ -14,7 +14,7 @@ public class TileGenerator : MonoBehaviour
     public GameObject prefab_stone;
 
     int map_width = 32;
-    int map_height = 500;
+    int map_height = 16;
 
     List<List<int>> noise_grid = new List<List<int>>();
     List<List<GameObject>> tile_grid = new List<List<GameObject>>();
