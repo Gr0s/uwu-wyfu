@@ -43,13 +43,16 @@ public class BlockScript : MonoBehaviour
 
     void UpdateScaleAndPosition()
     {
-        // Aktualizuj skalê i pozycjê obiektu w zale¿noœci od wytrzyma³oœci.
-        float newHeight = initialScale.y * currentDurability;
-        transform.localScale = new Vector3(initialScale.x, newHeight, initialScale.z);
+        foreach (Transform child in transform)
+        {
+            // Aktualizuj skalê i pozycjê tylko dla dzieci tego obiektu.
+            float newHeight = initialScale.y * currentDurability;
+            child.localScale = new Vector3(initialScale.x, newHeight, initialScale.z);
 
-        // Oblicz now¹ pozycjê, aby zachowaæ doln¹ czêœæ obiektu na sta³ym miejscu.
-        float newYPosition = initialPosition.y - (initialScale.y - newHeight) / 2f;
-        transform.position = new Vector3(transform.position.x, newYPosition, transform.position.z);
+            // Oblicz now¹ pozycjê dla dziecka, aby zachowaæ doln¹ czêœæ dziecka na sta³ym miejscu.
+            float newYPosition = initialPosition.y - (initialScale.y - newHeight) / 2f;
+            child.position = new Vector3(child.position.x, newYPosition, child.position.z);
+        }
     }
 
     public float CurrentDurability
